@@ -1,0 +1,8 @@
+{
+    "username": "Supfleur118",
+    "num_scroll": 10,
+    "num_tweet_per_topic": 100000,
+    "password": "@matkhau.com",
+    "topics": ["crypto", "bitcoin", "ethereum", "dogecoin", "binance", "shiba inu", "elon musk", "safemoon", "cardano", "xrp", "polkadot", "solana", "litecoin", "chainlink", "vechain", "uniswap", "theta", "stellar", "terra", "cosmos", "tron", "tezos", "monero", "avalanche", "eos", "ftx token", "neo", "klaytn", "iota", "algorand", "compound", "bitcoin cash", "pancakeswap", "maker", "bitcoin sv", "hedera hashgraph", "dash", "the graph", "elrond", "filecoin", "zilliqa", "near protocol", "huobi token", "decred", "nem", "chiliz", "enjin coin", "paxos standard", "stacks", "basic attention token", "quant", "zencash", "bitcoin gold", "ontology", "0x", "kusama", "ravencoin", "icon", "harmony", "siacoin", "bitcoin diamond", "waves", "qtum", "nano", "omisego", "bitcoin sv", "ontology", "0x", "kusama", "ravencoin", "icon", "harmony", "siacoin", "bitcoin diamond", "waves", "qtum", "nano", "omisego", "bitcoin sv", "ontology", "0x", "kusama", "ravencoin", "icon", "harmony", "siacoin", "bitcoin diamond", "waves", "qtum", "nano", "omisego", "bitcoin sv", "ontology", "0x", "kusama", "ravencoin", "icon", "harmony", "siacoin", "bitcoin diamond", "waves", "qtum", "nano", "omisego", "bitcoin sv", "ontology", "0x", "kusama", "ravencoin", "icon", "harmony", "siacoin", "bitcoin diamond", "waves", "qtum", "nano", "omisego", "bitcoin sv", "ontology", "0x", "kusama", "ravencoin", "icon"],
+    "data_dir": "output"
+  }
