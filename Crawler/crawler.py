@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 
 import os
 import json
@@ -12,15 +13,14 @@ import time
 import pandas as pd
 
 # Set up Chrome options and web driver
-profile = f"/home/truongxl/.config/google-chrome/Profile 1"
 
 chrome_options = Options()
-chrome_options.add_argument(f"--user-data-dir={profile}")
+chrome_options.add_argument('--user-data-dir=C:\\Users\\Admin\\AppData\\Local\\Google\\Chrome\\User Data\\Default')
 chrome_options.add_argument('--start-maximized')
 chrome_options.add_argument('--ignore-certificate-errors')
 
     
-chrome_path = '/usr/bin/google-chrome-stable'
+chrome_path = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
 chrome_options.binary_location = chrome_path
 
 driver = webdriver.Chrome(options=chrome_options)
