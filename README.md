@@ -112,3 +112,9 @@ python crawler.py
 </div>
 <br>
 <hr>
+
+Output:
+```javascript
+{
+{"Topic":"cosmos","Username":"Nature & Cosmos\n@nature2cosmos\n\u00b7\n17h","Tweet":"The Sun is 20 years old.\nYes, 20 \"galactic\" years.\n\n Understanding Meaning.","Likes":56,"Views":"5.1K","Reposts":12.0,"Replies":null,"Date":"2023-11-16T20:27:16.000Z"},{"Topic":"cosmos","Username":"jake\u00ae\n@jakestars_\n\u00b7\nNov 16","Tweet":"http:\/\/Stargaze.zone is your portal to the $STARS univ .....
+```
