@@ -56,7 +56,7 @@ python crawler.py
 <hr>
 <br>
 <div id="profileOutput">
-<p>Keys of the output</p>
+<p>output</p>
 
 <table>
     <thead>
