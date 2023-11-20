@@ -92,7 +92,6 @@ python crawler.py
             <td>Integer</td>
             <td>Number of likes of tweet</td>
         </tr>
-
         <tr>
             <td>Views</td>
             <td>Integer</td>
