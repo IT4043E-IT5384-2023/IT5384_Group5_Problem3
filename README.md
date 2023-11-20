@@ -68,64 +68,45 @@ python crawler.py
     </thead>
     <tbody>
         <tr>
-            <td>tweet_id</td>
+            <td>Topic</td>
             <td>String</td>
-            <td>Post Identifier(integer casted inside string)</td>
+            <td>topic of the tweet</td>
         </tr>
         <tr>
-            <td>username</td>
+            <td>Tweet</td>
             <td>String</td>
-            <td>Username of the profile</td>
+            <td>tweet</td>
         </tr>
         <tr>
-            <td>name</td>
-            <td>String</td>
-            <td>Name of the profile</td>
-        </tr>
-        <tr>
-            <td>replies</td>
+            <td>Username</td>
             <td>Integer</td>
-            <td>Number of replies of tweet</td>
+            <td>Username of tweet</td>
         </tr>
         <tr>
-            <td>retweets</td>
+            <td>Reposts</td>
             <td>Integer</td>
-            <td>Number of retweets of tweet</td>
+            <td>Number of Reposts of tweet</td>
         </tr>
         <tr>
             <td>likes</td>
             <td>Integer</td>
             <td>Number of likes of tweet</td>
         </tr>
+
         <tr>
-            <td>is_retweet</td>
-            <td>boolean</td>
-            <td>Is the tweet a retweet?</td>
+            <td>Views</td>
+            <td>Integer</td>
+            <td>number of views</td>
         </tr>
         <tr>
-            <td>retweet_link</td>
+            <td>Replies</td>
             <td>String</td>
-            <td>If it is retweet, then the retweet link else it'll be empty string</td>
+            <td>Replies of Reposts of tweet</td>
         </tr>
         <tr>
-            <td>posted_time</td>
+            <td>Date</td>
             <td>String</td>
-            <td>Time when tweet was posted in ISO 8601 format</td>
-        </tr>
-        <tr>
-            <td>content</td>
-            <td>String</td>
-            <td>content of tweet as text</td>
-        </tr>
-        <tr>
-            <td>hashtags</td>
-            <td>Array</td>
-            <td>Hashtags presents in tweet, if they're present in tweet</td>
-        </tr>
-        <tr>
-            <td>tweet_url</td>
-            <td>String</td>
-            <td>URL of the tweet</td>
+            <td>Date of the tweet</td>
         </tr>
     </tbody>
 </table>
