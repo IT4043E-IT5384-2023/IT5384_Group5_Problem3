@@ -27,8 +27,10 @@ raw_df['verified'] = raw_df['verified'].astype(int)
 raw_df['created_at'] = pd.to_datetime(raw_df['created_at'])
 # hour created
 raw_df['hour_created'] = pd.to_datetime(raw_df['created_at']).dt.hour
-raw_df['year'] = pd.to_datetime(raw_df['created_at']).dt.year
 
+raw_df['year'] = pd.to_datetime(raw_df['created_at']).dt.year
+# add 4 to year to get the actual year
+raw_df['year'] = raw_df['year'] + 4
 year_dict = raw_df['year'].value_counts().to_dict()
 
 default_profile_dict = raw_df['default_profile'].value_counts().to_dict()
