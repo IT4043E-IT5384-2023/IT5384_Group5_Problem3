@@ -3,4 +3,5 @@ selenium
 webdriver-manager
 openpyxl
 kafka-python
-elacticsearch
+evaluation
+scikit-learn

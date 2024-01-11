@@ -103,35 +103,37 @@ while 1:
         for tweet in tweets:
             if len(df) >= num_tweet_per_topic:
                 break
+            
+            # get information tweet: created_at, default_profile, default_profile_image, description, favourites_count, followers_count, friends_count	, geo_enabled, id, lang, location, profile_background_image_url, profile_image_url, statuses_count	, screen_name	, verified, average_tweets_per_day, account_age_days
             try:
-                username = tweet.find_element(By.XPATH, ".//div[@data-testid='User-Name']").text
-                tweet_content = tweet.find_element(By.XPATH, ".//div[@data-testid='tweetText']").text
-                like_count = tweet.find_element(By.XPATH, ".//div[@data-testid='like']").text
+                screen_name = tweet.find_element(By.XPATH, ".//div[@data-testid='User-Name']").text
+                created_at = tweet.find_element(By.XPATH, ".//time").get_attribute('datetime')
+                default_profile = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[1]/div[1]/div/span").get_attribute('aria-label')
+                default_profile_image = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[1]/div[1]/div/span").get_attribute('aria-label')
+                followers_count = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[1]/div[1]/div/span").get_attribute('aria-label')
+                friends_count = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[1]/div[1]/div/span").get_attribute('aria-label')
+                geo_enabled = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[1]/div[1]/div/span").get_attribute('aria-label')
+                id = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[1]/div[1]/div/span").get_attribute('aria-label')
+                lang = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[1]/div[1]/div/span").get_attribute('lang')
+                location = tweet.find_element(By.XPATH, '//div[@data-testid="UserProfileHeader_Items"]').text.split('\n')[1]
+                profile_background_image_url = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/span").get_attribute('aria-label')
+                profile_image_url = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/span").get_attribute('aria-label')
+                statuses_count = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/span").get_attribute('aria-label')
+                verified = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/span").get_attribute('aria-label')
+                average_tweets_per_day = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/span").get_attribute('aria-label')
+                account_age_days = tweet.find_element(By.XPATH, ".//div/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/span").get_attribute('aria-label')
+                description = tweet.find_element(By.XPATH, ".//div[@data-testid='tweetText']").text
+                favourites_count = tweet.find_element(By.XPATH, ".//div[@data-testid='like']").text
                 view_count = tweet.find_element(By.XPATH, ".//a[@role='link']/div/div[2]/span/span/span").text
                 repost_count = tweet.find_element(By.XPATH, ".//div[@data-testid='retweet']").text
                 reply_count = tweet.find_element(By.XPATH, ".//div[@data-testid='reply']").text
-                date = tweet.find_element(By.XPATH, ".//time").get_attribute('datetime')
+
             except:
                 time.sleep(10)
                 continue
-            
-            print("Username:", username)
-            print("Tweet:", tweet_content)
-            print("Likes:", like_count)
-            print("Views:", view_count)
-            print("Reposts:", repost_count)
-            print("Replies:", reply_count)
-            print("Date:", date)
-            print("---------------------------")
-            existing_tweet = df[
-                (df["Username"] == username) &
-                (df["Tweet"] == tweet_content)
-                ].any(axis=None)
 
-            if existing_tweet:
-                continue
+            new_row = {"created_at": created_at, "default_profile": default_profile, "default_profile_image": default_profile_image, "description": description, "favourites_count": favourites_count, "followers_count": followers_count, "friends_count": friends_count, "geo_enabled": geo_enabled, "id": id, "lang": lang, "location": location, "profile_background_image_url": profile_background_image_url, "profile_image_url": profile_image_url, "statuses_count": statuses_count, "screen_name": screen_name, "verified": verified, "average_tweets_per_day": average_tweets_per_day, "account_age_days": account_age_days, "view_count": view_count, "repost_count": repost_count, "reply_count": reply_count}
 
-            new_row = {"Topic": topic, "Username": username, "Tweet": tweet_content, "Likes": like_count, "Views": view_count, "Reposts": repost_count, "Replies": reply_count, "Date": date}
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
 
         driver.execute_script("window.localStorage.clear();")

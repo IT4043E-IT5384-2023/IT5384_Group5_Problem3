@@ -19,8 +19,8 @@ twitter_keys = {
 }
 
 # Get fully-trained KNNClassifier model
-with open('modeling/model.pickle', 'rb') as read_file:
-    knn_model = pickle.load(read_file)
+with open('model/XGBClassifier.pickle', 'rb') as read_file:
+    xgb_model = pickle.load(read_file)
 
 # Set up connection to Twitter API
 # auth = tweepy.OAuthHandler(
@@ -103,7 +103,7 @@ def bot_or_not(twitter_handle):
         # creates df for model.predict() format
         user_df = pd.DataFrame(np.matrix(user_features), columns=features)
 
-        prediction = knn_model.predict(user_df)[0]
+        prediction = xgb_model.predict(user_df)[0]
 
         return "Bot" if prediction == 1 else "Not a bot"
 
@@ -126,7 +126,7 @@ def bot_proba(twitter_handle):
                     'favourites_count', 'followers_count', 'friends_count', 'statuses_count', 'average_tweets_per_day',
                     'network', 'tweet_to_followers', 'follower_acq_rate', 'friends_acq_rate']
         user_df = pd.DataFrame([user_features], columns=features)
-        proba = knn_model.predict_proba(user_df)[:, 1][0] * 100
+        proba = xgb_model.predict_proba(user_df)[:, 1][0] * 100
         return round(proba, 2)
     
 

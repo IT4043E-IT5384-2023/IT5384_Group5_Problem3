@@ -1,48 +1,92 @@
+## consts
+import os
 import sys
-from random import choice
-from argparse import ArgumentParser, FileType
-from configparser import ConfigParser
-from confluent_kafka import Producer
+PROJECT_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
+sys.path.append(PROJECT_ROOT)
 
-if __name__ == '__main__':
-    # Parse the command line.
-    parser = ArgumentParser()
-    parser.add_argument('config_file', type=FileType('r'))
+from dotenv import load_dotenv
+load_dotenv()
+load_dotenv(f"{PROJECT_ROOT}/configs/infra.env")
+KAFKA_BOOTSTRAP_SERVER = os.getenv('KAFKA_BOOTSTRAP_SERVER')
+KAFKA_TOPIC = os.getenv('CRL_KAFKA_TOPIC')
+
+## env
+import json
+import argparse
+
+from kafka import KafkaProducer
+from kafka.admin import KafkaAdminClient, NewTopic
+from kafka.errors import TopicAlreadyExistsError
+
+
+
+def on_send_success(r):
+    logger.info((r.topic, r.partition, r.offset))
+
+def on_send_error(e):
+    logger.error('message send error:', exc_info=e)
+
+class Producer():
+    def __init__(self, id: int, afmode: bool = False):
+        # multi account index
+        self.id = id
+        self.afmode = afmode
+
+        # create kafka topic
+        self.create_topic(
+            KAFKA_TOPIC,
+            partition=3,
+            replication_factor=1
+        )
+
+        # kafka producer
+        self.producer = KafkaProducer(
+            bootstrap_servers=[KAFKA_BOOTSTRAP_SERVER],
+            value_serializer=lambda x: json.dumps(x).encode('utf-8')
+        )
+        
+    def create_topic(self, topic_name: str, partition: int = 3, replication_factor: int = 1):
+        try:
+            admin_client = KafkaAdminClient(bootstrap_servers=KAFKA_BOOTSTRAP_SERVER)
+
+            admin_client.create_topics(
+                new_topics=[NewTopic(
+                    name=topic_name,
+                    num_partitions=partition,
+                    replication_factor=replication_factor)],
+                validate_only=False)
+
+            logger.info(f"Trying to create topic: {topic_name}")
+        except TopicAlreadyExistsError as e:
+            logger.error(e)
+            pass
+    
+    def produce(self):
+        app = get_tw_session(*get_acc_by_index(self.id))
+        search_params = get_search_params()
+        crawled_data = crawl_tweet_kol(
+            app=app,
+            keywords=divide_kw_per_acc(self.id),
+            min_faves=search_params['min_faves'],
+            min_retweets=search_params['min_retweet'],
+            pages=search_params['pages'],
+            wait_time=search_params['wait_time'],
+            airflow_mode=self.afmode,
+            time_delta_hour=search_params['time_delta_hour']
+        )
+
+        for tweet in crawled_data:
+            self.producer \
+                .send(KAFKA_TOPIC, value=tweet) \
+                .add_callback(on_send_success) \
+                .add_errback(on_send_error)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--id", type=int, help="Producer ID", required=True)
+    parser.add_argument("--airflow", action="store_true", help="Airflow mode", required=False, default=False)
     args = parser.parse_args()
 
-    # Parse the configuration.
-    # See https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
-    config_parser = ConfigParser()
-    config_parser.read_file(args.config_file)
-    config = dict(config_parser['default'])
-
-    # Create Producer instance
-    producer = Producer(config)
-
-    # Optional per-message delivery callback (triggered by poll() or flush())
-    # when a message has been successfully delivered or permanently
-    # failed delivery (after retries).
-    def delivery_callback(err, msg):
-        if err:
-            print('ERROR: Message failed delivery: {}'.format(err))
-        else:
-            print("Produced event to topic {topic}: key = {key:12} value = {value:12}".format(
-                topic=msg.topic(), key=msg.key().decode('utf-8'), value=msg.value().decode('utf-8')))
-
-    # Produce data by selecting random values from these lists.
-    topic = "it4043e_group3_problem3"
-    user_ids = ['eabara', 'jsmith', 'sgarcia', 'jbernard', 'htanaka', 'awalther']
-    products = ['book', 'alarm clock', 't-shirts', 'gift card', 'batteries']
-
-    count = 0
-    for _ in range(10):
-
-        user_id = choice(user_ids)
-        product = choice(products)
-        producer.produce(topic, product, user_id, callback=delivery_callback)
-        count += 1
-
-    # Block until the messages are sent.
-    producer.poll(10000)
-    producer.flush()
-    
+    logger = custlogger("Producer " + str(args.id))
+    producer = Producer(id=args.id, afmode=args.airflow)
+    producer.produce()
